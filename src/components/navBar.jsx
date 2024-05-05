@@ -15,6 +15,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { useAppStore } from '../appStore';
 
 const AppBar = styled(MuiAppBar, {
@@ -175,7 +176,7 @@ export default function NavBar() {
             sx={{ mr: 2 }}
             onClick={()=>updateOpen(!dopen)}
           >
-            <MenuIcon />
+            {dopen ? <MenuOpenIcon /> : <MenuIcon />}
           </IconButton>
           <Typography
             variant="h6"
@@ -183,7 +184,7 @@ export default function NavBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            CSMS
           </Typography>
           <Search>
             <SearchIconWrapper>

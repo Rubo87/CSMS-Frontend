@@ -1,0 +1,7 @@
+.even-row {
+    background-color: #f9f9f9; /* Lighter color for even rows */
+}
+
+.odd-row {
+    background-color: #f0f0f0; /* Darker color for odd rows */
+}
