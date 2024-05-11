@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
     <NavBar />
-    <Box height={30} />
+    <Box height={70} />
       <Box sx={{ display: 'flex' }}>
         <SideNav />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

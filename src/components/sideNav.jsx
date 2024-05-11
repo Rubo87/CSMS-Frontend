@@ -172,7 +172,7 @@ export default function SideNav() {
                 <ListItemText primary="Reports" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/charts")}}>
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/calendar")}}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -189,7 +189,7 @@ export default function SideNav() {
                 >
                   <AutoGraphOutlinedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Charts" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Calendar" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
         </List>

@@ -3,14 +3,14 @@ import SideNav from '../components/sideNav'
 import NavBar from '../components/navBar'
 import Box from '@mui/material/Box';
 
-export default function Charts() {
+export default function Calendar() {
   return (
     <>
     <NavBar />
-    <Box height={30} />
+    <Box height={70} />
       <Box sx={{ display: 'flex' }}>
       <SideNav />
-        <div>Charts</div>
+        <div>Calendar</div>
       </Box>
     </>
   )
