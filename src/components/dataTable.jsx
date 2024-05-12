@@ -1,67 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import '../styles/accounts.css';
+import { Modal } from '@mui/material';
+import Module from './module';
 
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'class', headerName: 'Class', width: 130 },
-  { field: 'companyName', headerName: 'School', width: 150 },
-  {
-    field: 'users',
-    headerName: 'Users',
-    type: 'number',
-    width: 80,
-  },
-  { field: 'firstName', headerName: 'Director First name', width: 180 },
-  { field: 'lastName', headerName: 'Director Last name', width: 180 },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 180,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-  },
-  {
-    field: 'city',
-    headerName: 'City',
-    width: 160
-  },
-  {
-    field: 'country',
-    headerName: 'Country',
-    width: 160,
-  },
-  // Edit button column
-  {
-    field: 'edit',
-    headerName: '',
-    width: 100,
-    renderCell: (params) => (
-      <strong>
-        <button onClick={() => handleEdit(params.row.id)}>Edit</button>
-      </strong>
-    ),
-  },
-  // Delete button column
-  {
-    field: 'delete',
-    headerName: '',
-    width: 100,
-    renderCell: (params) => (
-      <strong>
-        <button onClick={() => handleDelete(params.row.id)}>Delete</button>
-      </strong>
-    ),
-  },
-];
-
-const getRowClassName = (params) => {
-  return params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row';
-};
 
 export default function DataTable() {
   const [rows, setRows] = useState([]);
+  const [moduleOpen, setModuleOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -79,9 +25,110 @@ export default function DataTable() {
       console.error('Error fetching data:', error);
     }
   };
+  
+  const handleDelete = async (id) => {
+    try {
+      // Show confirmation dialog
+      const confirmed = window.confirm("Are you sure you want to delete this school?");
+      if (!confirmed) {
+        return; // Abort deletion
+      }
+      
+      // Proceed with deletion
+      const response = await fetch(`https://csms-backend.vercel.app/api/language-schools/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete data');
+      }
+      // Update state to reflect the deletion
+      setRows(rows.filter(row => row.id !== id));
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
+
+  const handleEdit = async (id, updatedData) => {
+    try {
+      const response = await fetch(`https://csms-backend.vercel.app/api/language-schools/${id}`, {
+        method: 'PUT', // or 'PATCH' depending on your API
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update data');
+      }
+      // Update state to reflect the edited data
+      const editedRows = rows.map(row => {
+        if (row.id === id) {
+          return { ...row, ...updatedData };
+        }
+        return row;
+      });
+      setRows(editedRows);
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+  };
+  
+  
+  
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'class', headerName: 'Class', width: 130 },
+    { field: 'companyname', headerName: 'School', width: 150 },
+    {
+      field: 'users',
+      headerName: 'Users',
+      type: 'number',
+      width: 80,
+    },
+    { field: 'firstname', headerName: 'Director First name', width: 180 },
+    { field: 'lastname', headerName: 'Director Last name', width: 180 },
+    {
+      field: 'city',
+      headerName: 'City',
+      width: 160
+    },
+    {
+      field: 'country',
+      headerName: 'Country',
+      width: 160,
+    },
+    // Edit button column
+    {
+      field: 'edit',
+      headerName: '',
+      width: 100,
+      renderCell: (params) => (
+        <strong>
+          <button onClick={() => handleEdit(params.row.id)}>Edit</button>
+        </strong>
+      ),
+    },
+    // Delete button column
+    {
+      field: 'delete',
+      headerName: '',
+      width: 100,
+      renderCell: (params) => (
+        <strong>
+          <button onClick={() => handleDelete(params.row.id)}>Delete</button>
+        </strong>
+      ),
+    },
+  ];
+  
+  const getRowClassName = (params) => {
+    return params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row';
+  };
 
   return (
     <div style={{ height: 800, width: '100%', background: 'white' }}>
+            <button className="btn" onClick={() => setModuleOpen(true)}>Add</button>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -94,6 +141,9 @@ export default function DataTable() {
         pageSizeOptions={[5, 10, 100]}
         checkboxSelection
       />
+
+      {moduleOpen && <Module closeModule={() =>{setModuleOpen(false);}} />}
+      
     </div>
   );
 }
