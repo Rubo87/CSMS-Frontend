@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import '../styles/accounts.css';
 import { Modal } from '@mui/material';
-import Module from './module';
+import ModuleUsers from './moduleUsers';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 200 },
   { field: 'username', headerName: 'Username', width: 200 },
   { field: 'email', headerName: 'Email', width: 200 },
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'surname', headerName: 'Surname', width: 200 },
+  { field: 'role', headerName: 'Role', width: 200 },
 ];
 
 const getRowClassName = (params) => {
@@ -16,7 +19,7 @@ const getRowClassName = (params) => {
 
 export default function DataUsers() {
   const [rows, setRows] = useState([]);
-  const [moduleOpen, setModuleOpen] = useState(false);
+  const [moduleUsersOpen, setModuleUsersOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -50,8 +53,8 @@ export default function DataUsers() {
         pageSizeOptions={[5, 10, 100]}
         checkboxSelection
       />
-      <button className="btn" onClick={() => setModuleOpen(true)}>Add</button>
-      {moduleOpen && <Module closeModule={() =>{setModuleOpen(false);}} />}
+      <button className="btn" onClick={() => setModuleUsersOpen(true)}>Add</button>
+      {moduleUsersOpen && <ModuleUsers closeModule={() =>{setModuleUsersOpen(false);}} />}
       
     </div>
   );

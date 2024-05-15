@@ -63,6 +63,7 @@ const fetchCountries = async () => {
                 alert("New entry added successfully!");
                 // Close the module or perform any other action
                 closeModule();
+                window.location.reload();
             } else {
                 // Error occurred while adding data
                 alert("Error adding new entry. Please try again later.");

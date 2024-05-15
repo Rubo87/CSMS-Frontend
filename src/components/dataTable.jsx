@@ -28,21 +28,20 @@ export default function DataTable() {
   
   const handleDelete = async (id) => {
     try {
-      // Show confirmation dialog
+      
       const confirmed = window.confirm("Are you sure you want to delete this school?");
       if (!confirmed) {
-        return; // Abort deletion
+        return; 
       }
       
-      // Proceed with deletion
       const response = await fetch(`https://csms-backend.vercel.app/api/language-schools/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
         throw new Error('Failed to delete data');
       }
-      // Update state to reflect the deletion
       setRows(rows.filter(row => row.id !== id));
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting data:', error);
     }
@@ -52,7 +51,7 @@ export default function DataTable() {
   const handleEdit = async (id, updatedData) => {
     try {
       const response = await fetch(`https://csms-backend.vercel.app/api/language-schools/${id}`, {
-        method: 'PUT', // or 'PATCH' depending on your API
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -61,18 +60,22 @@ export default function DataTable() {
       if (!response.ok) {
         throw new Error('Failed to update data');
       }
-      // Update state to reflect the edited data
-      const editedRows = rows.map(row => {
+      const updatedRow = await response.json(); // Get the updated row data from the response
+      const updatedRows = rows.map(row => {
         if (row.id === id) {
-          return { ...row, ...updatedData };
+          return updatedRow; // Replace the existing row with the updated row
         }
         return row;
       });
-      setRows(editedRows);
+      setRows(updatedRows);
+      setEditDialogOpen(false); // Close the edit dialog
     } catch (error) {
       console.error('Error updating data:', error);
     }
   };
+  
+  
+  
   
   
   
