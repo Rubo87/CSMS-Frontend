@@ -38,7 +38,7 @@ export default function SignInSide() {
     const password = formData.get('password');
   
     try {
-        const response = await fetch('/auth/login', {
+        const response = await fetch('https://csms-backend.vercel.app/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function SignInSide() {
           throw new Error(errorMessage);
         }
   
-        window.location.href = 'https://66363bed692e08f8f4f68096--rcsms.netlify.app/secure-route';
+        window.location.href = '/dashboard';
       } catch (error) {
         console.error('Login error:', error);
         // Handle login error (e.g., display an error message to the user)

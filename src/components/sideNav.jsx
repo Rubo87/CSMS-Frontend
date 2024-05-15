@@ -152,7 +152,7 @@ export default function SideNav() {
                 <ListItemText primary="Accounts" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/reports")}}>
+{/*             <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/reports")}}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -171,7 +171,7 @@ export default function SideNav() {
                 </ListItemIcon>
                 <ListItemText primary="Reports" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
             <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/calendar")}}>
               <ListItemButton
                 sx={{

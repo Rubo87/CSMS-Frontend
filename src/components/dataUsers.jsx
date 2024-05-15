@@ -37,7 +37,27 @@ export default function DataUsers() {
       console.error('Error fetching data:', error);
     }
   };
-  
+
+  const addUser = async (userData) => {
+    try {
+      const response = await fetch('https://csms-backend.vercel.app/users/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add user');
+      }
+
+      // Refresh the data after adding a new user
+      fetchData();
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };
 
   return (
     <div style={{ height: 800, width: '100%', background: 'white' }}>
@@ -54,8 +74,7 @@ export default function DataUsers() {
         checkboxSelection
       />
       <button className="btn" onClick={() => setModuleUsersOpen(true)}>Add</button>
-      {moduleUsersOpen && <ModuleUsers closeModule={() =>{setModuleUsersOpen(false);}} />}
-      
+      {moduleUsersOpen && <ModuleUsers closeModule={() => { setModuleUsersOpen(false); addUser(); }} />}
     </div>
   );
 }

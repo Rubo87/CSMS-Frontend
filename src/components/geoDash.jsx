@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
-export const data = [
-  ["Country", "Popularity"],
-  ["Germany", 200],
-  ["United States", 300],
-  ["Brazil", 400],
-  ["Canada", 500],
-  ["France", 600],
-  ["RU", 700],
-];
-
 export function GeoDash() {
+  const [schoolData, setSchoolData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://csms-backend.vercel.app/api/language-schools")
+      .then((response) => response.json())
+      .then((data) => {
+        const countries = {};
+        data.forEach((school) => {
+          countries[school.country] = (countries[school.country] || 0) + 1;
+        });
+
+        const chartData = [
+          ["Country", "Number of Schools"],
+          ...Object.entries(countries).map(([country, count]) => [
+            country,
+            count,
+          ]),
+        ];
+        setSchoolData(chartData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <Chart
       chartEvents={[
@@ -21,7 +36,7 @@ export function GeoDash() {
             const chart = chartWrapper.getChart();
             const selection = chart.getSelection();
             if (selection.length === 0) return;
-            const region = data[selection[0].row + 1];
+            const region = schoolData[selection[0].row + 1];
             console.log("Selected : " + region);
           },
         },
@@ -29,7 +44,7 @@ export function GeoDash() {
       chartType="GeoChart"
       width="100%"
       height="400px"
-      data={data}
+      data={schoolData}
     />
   );
 }
