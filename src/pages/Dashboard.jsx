@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import SideNav from '../components/sideNav'
 import NavBar from '../components/navBar'
 import AccordionDash from '../components/accordionDash';
@@ -17,6 +18,26 @@ import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 
 const Dashboard = () => {
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [averageEarningsPerSchool, setAverageEarningsPerSchool] = useState(0);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://csms-backend.vercel.app/api/language-schools');
+      const data = await response.json();
+      const totalUsers = data.reduce((acc, school) => acc + school.users, 0);
+      const totalEarnings = totalUsers * 26; // Total earnings: Total users * €26
+      const averageEarningsPerSchool = totalEarnings / data.length; // Average earnings per school: Total earnings / Total schools
+      setTotalEarnings(totalEarnings);
+      setAverageEarningsPerSchool(averageEarningsPerSchool);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   return (
     <>
     <div className='bgColor'>
@@ -29,30 +50,30 @@ const Dashboard = () => {
         <Grid item xs={8}>
         <Stack spacing={2} direction="row">
         <Card sx={{ minWidth: 49 + "%", height: 164 }} className='gradientDark'>
-          <CardContent className='iconStyle2'>
-            <div>
-              <CreditCardOutlinedIcon />
-            </div>
-            <Typography gutterBottom variant="h4" component="div">
-              $500.00
-            </Typography>
-            <Typography gutterBottom variant="body3" component="div" sx={{color: "#ccd1d1"}}>
-              Total Earnings
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card sx={{ minWidth: 49 + "%", height: 164 }} className='gradientLight'>
-          <CardContent className='iconStyle2'>
-            <div>
-              <ShoppingBagOutlinedIcon />
-            </div>
-            <Typography gutterBottom variant="h4" component="div">
-              $900.00
-            </Typography>
-            <Typography gutterBottom variant="body3" component="div" sx={{color: "#ccd1d1"}}>
-              Total Sales
-            </Typography>
-          </CardContent>
+        <CardContent className='iconStyle2'>
+                      <div>
+                        <CreditCardOutlinedIcon />
+                      </div>
+                      <Typography gutterBottom variant="h4" component="div">
+                        {`€${totalEarnings.toFixed(2)}`} {/* Display total earnings */}
+                      </Typography>
+                      <Typography gutterBottom variant="body3" component="div" sx={{ color: "#ccd1d1" }}>
+                        Total Earnings
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                  <Card sx={{ minWidth: 49 + "%", height: 164 }} className='gradientLight'>
+                    <CardContent className='iconStyle2'>
+                      <div>
+                        <ShoppingBagOutlinedIcon />
+                      </div>
+                      <Typography gutterBottom variant="h4" component="div">
+                        {`€${averageEarningsPerSchool.toFixed(2)}`} {/* Display average earnings per school */}
+                      </Typography>
+                      <Typography gutterBottom variant="body3" component="div" sx={{ color: "#ccd1d1" }}>
+                        Average Earnings per School
+                      </Typography>
+                    </CardContent>
         </Card>
         </Stack>
         </Grid>

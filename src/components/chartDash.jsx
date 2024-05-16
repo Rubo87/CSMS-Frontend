@@ -1,29 +1,65 @@
-import React from "react";
-import { Chart } from "react-google-charts";
-
-export const data = [
-  ["Year", "Sales", "Expenses", "Profit"],
-  ["2014", 1000, 400, 200],
-  ["2015", 1170, 460, 250],
-  ["2016", 660, 1120, 300],
-  ["2017", 1030, 540, 350],
-];
-
-export const options = {
-  chart: {
-    title: "Company Performance",
-    subtitle: "Sales, Expenses, and Profit: 2014-2017",
-  },
-};
+import React, { useEffect, useState } from 'react';
+import { Chart } from 'react-google-charts';
 
 export function ChartDash() {
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://csms-backend.vercel.app/api/language-schools');
+      const data = await response.json();
+
+      // Group data by year
+      const salesByYear = {};
+      const expensesByYear = {};
+
+      data.forEach(school => {
+        const year = school.year.toString();
+        if (!salesByYear[year]) {
+          salesByYear[year] = 0;
+          expensesByYear[year] = 0;
+        }
+        const yearlySales = school.users * 26; // Sales: 26€ per user per year
+        const yearlyExpenses = school.users * 5; // Expenses: 5€ per user per year
+        salesByYear[year] += yearlySales;
+        // Adjust expenses not to exceed sales
+        expensesByYear[year] += Math.min(yearlyExpenses, yearlySales);
+      });
+
+      // Prepare chart data
+      const chartData = [['Year', 'Sales', 'Expenses', 'Profit']];
+      Object.keys(salesByYear).forEach(year => {
+        const profit = salesByYear[year] - expensesByYear[year];
+        chartData.push([year, salesByYear[year], expensesByYear[year], profit]);
+      });
+
+      setChartData(chartData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   return (
     <Chart
       chartType="Bar"
       width="100%"
       height="400px"
-      data={data}
-      options={options}
+      data={chartData}
+      options={{
+        title: 'Company Performance',
+        subtitle: 'Sales, Expenses, and Profit per Year',
+        hAxis: {
+          title: 'Year',
+        },
+        vAxis: {
+          title: 'Amount (€)',
+          format: 'currency',
+        },
+      }}
     />
   );
 }

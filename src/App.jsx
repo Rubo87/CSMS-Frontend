@@ -11,6 +11,7 @@ import Admin from './pages/Admin'
 import Settings from './pages/Settings'
 import Users from './pages/Users'
 import SignInSide from './pages/login';
+import Profile from './pages/Profile';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,9 +27,11 @@ function App() {
           <Route path="/calendar" element={<Calendar />}></Route>
 {/*           <Route path="/reports" element={<Reports />}></Route> */}
           <Route path="/admin" element={<Admin />}></Route>
-          <Route path="/settings" element={<Settings />}></Route>
+{          <Route path="/settings" element={<Settings />}></Route>}
           <Route path="/users" element={<Users />}></Route>
           <Route path="/" element={<SignInSide />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
+
         </Routes>
       </ThemeProvider>
       </BrowserRouter>

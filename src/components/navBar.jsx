@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { useAppStore } from '../appStore';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -54,7 +55,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -69,6 +69,7 @@ export default function NavBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const updateOpen = useAppStore((state) => state.updateOpen);
   const dopen = useAppStore((state) => state.dopen);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -90,6 +91,21 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile'); // Navigate to Profile
+    handleMenuClose();
+  };
+
+  const handleAccountClick = () => {
+    navigate('/users'); // Navigate to Users
+    handleMenuClose();
+  };
+
+  const handleLogoutClick = () => {
+    navigate('/'); // Navigate to SignInSide
+    handleMenuClose();
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -107,8 +123,9 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+      <MenuItem onClick={handleAccountClick}>My accounts</MenuItem>
+      <MenuItem onClick={handleLogoutClick}>Log out</MenuItem>
     </Menu>
   );
 
@@ -174,7 +191,7 @@ export default function NavBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-            onClick={()=>updateOpen(!dopen)}
+            onClick={() => updateOpen(!dopen)}
           >
             {dopen ? <MenuOpenIcon /> : <MenuIcon />}
           </IconButton>

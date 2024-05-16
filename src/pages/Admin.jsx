@@ -1,17 +1,27 @@
-import React from 'react'
+import React from 'react';
 import SideNav from '../components/sideNav'
 import NavBar from '../components/navBar'
 import Box from '@mui/material/Box';
+import '../styles/Dashboard.css';
+import AdminView from '../components/adminView';
 
-export default function Admin() {
+
+
+const Admin = () => {
   return (
     <>
+    <div className='bgColor'>
     <NavBar />
-    <Box height={30} />
-      <Box sx={{ display: 'flex' }}>
+    <Box height={70} />
+    <Box sx={{ display: 'block', marginLeft: '15%', marginRight: '2%' }}>
+      <Box>
       <SideNav />
-        <div>Admin</div>
+      <AdminView />
       </Box>
+      </Box>
+    </div>
     </>
-  )
+  );
 }
+
+export default Admin;
