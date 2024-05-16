@@ -68,6 +68,7 @@ const addSampleEvents = async () => {
   }
 };
 
+
   const handleDateClick = (info) => {
     setShowEventForm(true);
     setSelectedDate(info.dateStr);
@@ -75,34 +76,35 @@ const addSampleEvents = async () => {
 
   const handleEventSubmit = async (newEvent) => {
     try {
-        // Transform newEvent to match the backend expectations
-        const formattedEvent = {
-            title: newEvent.title,
-            event_date: newEvent.date, // Ensure this is in the correct format YYYY-MM-DD
-            event_time: newEvent.time, // Ensure this is in the correct format HH:MM:SS
-            event_type: newEvent.eventType.toLowerCase() // Ensure this is 'high', 'medium', or 'low'
-        };
-
-        console.log('Submitting new event:', formattedEvent); // Debugging log
-
-        const response = await fetch('https://csms-backend.vercel.app/api/calendar-events', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formattedEvent)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to add event');
-        }
-
-        setShowEventForm(false);
-        console.log('Event added successfully');
+      // Transform newEvent to match the backend expectations
+      const formattedEvent = {
+        title: newEvent.title,
+        event_date: newEvent.date, // Ensure this is in the correct format YYYY-MM-DD
+        event_time: newEvent.time, // Ensure this is in the correct format HH:MM:SS
+        event_type: newEvent.eventType.toLowerCase() // Ensure this is 'high', 'medium', or 'low'
+      };
+  
+      console.log('Submitting new event:', formattedEvent); // Debugging log
+  
+      const response = await fetch('https://csms-backend.vercel.app/api/calendar-events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formattedEvent)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to add event');
+      }
+  
+      setShowEventForm(false);
+      console.log('Event added successfully');
     } catch (error) {
-        console.error('Error adding event:', error);
+      console.error('Error adding event:', error);
     }
-};
+  };
+  
 
   
 

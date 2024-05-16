@@ -15,58 +15,51 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Home from './Home';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://66363bed692e08f8f4f68096--rcsms.netlify.app/">
-        CSMS
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
-export default function SignInSide() {
+function SignInSide() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false); // New state to toggle sign-up mode
+
+  const handleSignUpClick = () => {
+    setIsSigningUp(true);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email');
     const password = formData.get('password');
-  
+    const name = formData.get('name'); // Added fields for sign-up
+    const surname = formData.get('surname'); // Added fields for sign-up
+    const username = formData.get('username'); // Added fields for sign-up
+    const role = 'user'; // Default role for sign-up users
+
     try {
-        const response = await fetch('https://csms-backend.vercel.app/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-  
-        if (!response.ok) {
-          const errorMessage = await response.text();
-          throw new Error(errorMessage);
-        }
-    
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error('Login error:', error);
-        // Handle login error (e.g., display an error message to the user)
+      const response = await fetch('https://csms-backend.vercel.app/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, name, surname, username, role }), // Send additional sign-up data
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
       }
-    };
-  
-    if (isLoggedIn) {
-      return <Home />;
+
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error('Sign-up error:', error);
+      // Handle sign-up error (e.g., display an error message to the user)
     }
+  };
+
+  if (isLoggedIn) {
+    return <Home />;
+  }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={createTheme()}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -83,9 +76,38 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              {isSigningUp ? 'Sign up' : 'Sign in'}
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              {isSigningUp && (
+                <>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    name="name"
+                    autoFocus
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="surname"
+                    label="Surname"
+                    name="surname"
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                  />
+                </>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -94,7 +116,6 @@ export default function SignInSide() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
               />
               <TextField
                 margin="normal"
@@ -106,17 +127,19 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              {isSigningUp && (
+                <FormControlLabel
+                  control={<Checkbox value="agree" color="primary" />}
+                  label="I agree to the Terms and Conditions"
+                />
+              )}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                {isSigningUp ? 'Sign Up' : 'Sign In'}
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -125,12 +148,21 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="#" variant="body2" onClick={handleSignUpClick}>
+                    {isSigningUp ? 'Already have an account? Sign in' : 'Don\'t have an account? Sign Up'}
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Box mt={5}>
+                <Typography variant="body2" color="text.secondary" align="center">
+                  {'Copyright © '}
+                  <Link color="inherit" href="https://66363bed692e08f8f4f68096--rcsms.netlify.app/">
+                    CSMS
+                  </Link>{' '}
+                  {new Date().getFullYear()}
+                  {'.'}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Grid>
@@ -152,3 +184,5 @@ export default function SignInSide() {
     </ThemeProvider>
   );
 }
+
+export default SignInSide;
