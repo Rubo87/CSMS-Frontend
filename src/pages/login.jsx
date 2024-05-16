@@ -51,7 +51,7 @@ export default function SignInSide() {
           throw new Error(errorMessage);
         }
   
-        window.location.href = '/dashboard';
+        window.location.href = '/home';
       } catch (error) {
         console.error('Login error:', error);
         // Handle login error (e.g., display an error message to the user)

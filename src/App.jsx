@@ -20,7 +20,7 @@ function App() {
       <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/home" element={<Home />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/accounts" element={<Accounts />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
@@ -28,7 +28,7 @@ function App() {
           <Route path="/admin" element={<Admin />}></Route>
           <Route path="/settings" element={<Settings />}></Route>
           <Route path="/users" element={<Users />}></Route>
-          <Route path="/login" element={<SignInSide />}></Route>
+          <Route path="/" element={<SignInSide />}></Route>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>
