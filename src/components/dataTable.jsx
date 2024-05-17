@@ -132,7 +132,6 @@ export default function DataTable() {
   return (
     <div style={{ height: 800, width: '100%', background: 'white' }}>
             <button className="btn" onClick={() => setModuleOpen(true)}>Add</button>
-            
       <DataGrid
         rows={rows}
         columns={columns}
