@@ -10,25 +10,26 @@ export default function Module({ closeModule }) {
     const [city, setCity] = useState("");
     const [country, setCountry] = useState("");
     const [classValue, setClassValue] = useState("A");
+    const [year, setYear] = useState(""); // State variable for year
+
     const [countryList, setCountryList] = useState([]);
 
     // Function to fetch list of countries
-const fetchCountries = async () => {
-    try {
-        const response = await fetch("https://restcountries.com/v3.1/all");
-        if (response.ok) {
-            const data = await response.json();
-            // Extract country names from the response
-            const countries = data.map((country) => country.name.common);
-            setCountryList(countries);
-        } else {
-            console.error("Failed to fetch countries");
+    const fetchCountries = async () => {
+        try {
+            const response = await fetch("https://restcountries.com/v3.1/all");
+            if (response.ok) {
+                const data = await response.json();
+                // Extract country names from the response
+                const countries = data.map((country) => country.name.common);
+                setCountryList(countries);
+            } else {
+                console.error("Failed to fetch countries");
+            }
+        } catch (error) {
+            console.error("Error fetching countries:", error);
         }
-    } catch (error) {
-        console.error("Error fetching countries:", error);
-    }
-};
-
+    };
 
     // Fetch list of countries on component mount
     useEffect(() => {
@@ -46,7 +47,8 @@ const fetchCountries = async () => {
             lastName,
             city,
             country,
-            classValue
+            classValue,
+            year // Include year in formData
         };
         // Make POST request
         try {
@@ -153,6 +155,15 @@ const fetchCountries = async () => {
                             <option value="B">B</option>
                             <option value="C">C</option>
                         </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="year">Year</label> {/* Add year input field */}
+                        <input
+                            type="number"
+                            id="year"
+                            value={year}
+                            onChange={(e) => setYear(e.target.value)}
+                        />
                     </div>
                     <button type="submit" className="btn">
                         Submit

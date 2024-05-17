@@ -41,7 +41,6 @@ export default function DataTable() {
         throw new Error('Failed to delete data');
       }
       setRows(rows.filter(row => row.id !== id));
-      window.location.reload();
     } catch (error) {
       console.error('Error deleting data:', error);
     }

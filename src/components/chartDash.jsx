@@ -12,11 +12,17 @@ export function ChartDash() {
     try {
       const response = await fetch('https://csms-backend.vercel.app/api/language-schools');
       const data = await response.json();
-
+  
+      // Check if data is an array and not empty
+      if (!Array.isArray(data) || data.length === 0) {
+        console.error('Invalid or empty data returned:', data);
+        return;
+      }
+  
       // Group data by year
       const salesByYear = {};
       const expensesByYear = {};
-
+  
       data.forEach(school => {
         const year = school.year.toString();
         if (!salesByYear[year]) {
@@ -29,19 +35,20 @@ export function ChartDash() {
         // Adjust expenses not to exceed sales
         expensesByYear[year] += Math.min(yearlyExpenses, yearlySales);
       });
-
+  
       // Prepare chart data
       const chartData = [['Year', 'Sales', 'Expenses', 'Profit']];
       Object.keys(salesByYear).forEach(year => {
         const profit = salesByYear[year] - expensesByYear[year];
         chartData.push([year, salesByYear[year], expensesByYear[year], profit]);
       });
-
+  
       setChartData(chartData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+  
 
   return (
     <Chart
