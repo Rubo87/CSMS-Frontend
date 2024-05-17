@@ -156,7 +156,7 @@ function SignInSide() {
               <Box mt={5}>
                 <Typography variant="body2" color="text.secondary" align="center">
                   {'Copyright © '}
-                  <Link color="inherit" href="https://66363bed692e08f8f4f68096--rcsms.netlify.app/">
+                  <Link color="inherit" href="#">
                     CSMS
                   </Link>{' '}
                   {new Date().getFullYear()}

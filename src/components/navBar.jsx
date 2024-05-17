@@ -148,7 +148,7 @@ export default function NavBar() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={1} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
@@ -157,10 +157,10 @@ export default function NavBar() {
       <MenuItem>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="show 10 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={10} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>

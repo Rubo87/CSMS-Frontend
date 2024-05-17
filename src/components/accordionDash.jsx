@@ -4,7 +4,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function AccordionDash() {
     const [expanded, setExpanded] = React.useState(false);
@@ -21,14 +20,13 @@ export default function AccordionDash() {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
             >
-                <Typography sx={{ width: '40%', flexShrink: 0 }}>
-                    General settings
+                <Typography sx={{ fontWeight: 'bold', width: '40%', flexShrink: 0 }}>
+                    Local Package
                 </Typography>
             </AccordionSummary>
             <AccordionDetails>
             <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                malesuada lacus ex, sit amet blandit leo lobortis eget.
+                The Local Package is ideal for users who want basic features tailored to their local needs. It includes essential tools for managing local data and communication.
             </Typography>
             </AccordionDetails>
         </Accordion>
@@ -38,12 +36,11 @@ export default function AccordionDash() {
             aria-controls="panel2bh-content"
             id="panel2bh-header"
             >
-            <Typography sx={{ width: '40%', flexShrink: 0 }}>Users</Typography>
+            <Typography sx={{ fontWeight: 'bold', width: '40%', flexShrink: 0 }}>Basic Package</Typography>
             </AccordionSummary>
             <AccordionDetails>
             <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                malesuada lacus ex, sit amet blandit leo lobortis eget.
+                The Basic Package offers fundamental features suitable for all users. It provides essential tools for managing data and communication efficiently.
             </Typography>
             </AccordionDetails>
         </Accordion>
@@ -53,29 +50,13 @@ export default function AccordionDash() {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
             >
-            <Typography sx={{ width: '40%', flexShrink: 0 }}>
-                Advanced settings
+            <Typography sx={{ fontWeight: 'bold', width: '40%', flexShrink: 0 }}>
+                Pro Package
             </Typography>
             </AccordionSummary>
             <AccordionDetails>
             <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                malesuada lacus ex, sit amet blandit leo lobortis eget.
-            </Typography>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
-            >
-            <Typography sx={{ width: '40%', flexShrink: 0 }}>Personal data</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                malesuada lacus ex, sit amet blandit leo lobortis eget.
+                The Pro Package is designed for professional users who need advanced features. It includes premium tools for data management, analysis, and collaboration.
             </Typography>
             </AccordionDetails>
         </Accordion>

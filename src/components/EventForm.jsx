@@ -6,7 +6,7 @@ function EventForm({ date, onSubmit }) {
   const [eventType, setEventType] = useState("");
 
   useEffect(() => {
-    // Update the time state when the date prop changes
+    // Reset the time state when the date prop changes
     setTime("");
   }, [date]);
 
@@ -25,14 +25,16 @@ function EventForm({ date, onSubmit }) {
       date, // Using the date prop directly
       eventType,
     };
-    console.log("New event data:", newEvent); // Log the new event data
     onSubmit(newEvent);
+    // Reset form fields after submission
+    setTitle("");
+    setTime("");
+    setEventType("");
   };
 
   const handleTimeChange = (e) => {
     // Update the time state when the time input changes
     setTime(e.target.value);
-    console.log("Selected time:", e.target.value); // Log the selected time
   };
 
   return (

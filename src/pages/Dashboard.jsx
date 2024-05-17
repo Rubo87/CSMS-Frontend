@@ -20,6 +20,8 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 const Dashboard = () => {
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [averageEarningsPerSchool, setAverageEarningsPerSchool] = useState(0);
+  const [incomePerMonth, setIncomePerMonth] = useState(0);
+  const [incomePerYear, setIncomePerYear] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -32,8 +34,12 @@ const Dashboard = () => {
       const totalUsers = data.reduce((acc, school) => acc + school.users, 0);
       const totalEarnings = totalUsers * 26; // Total earnings: Total users * €26
       const averageEarningsPerSchool = totalEarnings / data.length; // Average earnings per school: Total earnings / Total schools
+      const incomePerMonth = totalEarnings / 48; // Income per month: Total earnings / 12
+      const incomePerYear = totalEarnings / 4; // Income per year: Total earnings
       setTotalEarnings(totalEarnings);
       setAverageEarningsPerSchool(averageEarningsPerSchool);
+      setIncomePerMonth(incomePerMonth);
+      setIncomePerYear(incomePerYear);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -79,28 +85,28 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={2}>
-            <Card sx={{ minWidth: 345 }} className='gradientDark'>
-                <Stack spacing={2} direction="row">
-                  <div className='iconStyle'>
-                    <StorefrontOutlinedIcon />
-                  </div>
-                  <div className='paddingall'>
-                    <span className='priceTitle'>$0.00</span><br />
-                    <span className='priceSubitle'>Total Income</span>   
-                  </div>
-                </Stack>
-            </Card>
-            <Card sx={{ minWidth: 345 }} className='gradientLight'>
-              <Stack spacing={2} direction="row">
-                  <div className='iconStyle'>
-                    <StorefrontOutlinedIcon />
-                  </div>
-                  <div className='paddingall'>
-                    <span className='priceTitle'>$100.00</span><br />
-                    <span className='priceSubitle'>Total Income</span>   
-                  </div>
-                </Stack>
-            </Card>
+                  <Card sx={{ minWidth: 345 }} className='gradientDark'>
+                    <Stack spacing={2} direction="row">
+                      <div className='iconStyle'>
+                        <StorefrontOutlinedIcon />
+                      </div>
+                      <div className='paddingall'>
+                        <span className='priceTitle'>{`€${incomePerMonth.toFixed(2)}`}</span><br />
+                        <span className='priceSubitle'>Income per month</span>
+                      </div>
+                    </Stack>
+                  </Card>
+                  <Card sx={{ minWidth: 345 }} className='gradientLight'>
+                    <Stack spacing={2} direction="row">
+                      <div className='iconStyle'>
+                        <StorefrontOutlinedIcon />
+                      </div>
+                      <div className='paddingall'>
+                        <span className='priceTitle'>{`€${incomePerYear.toFixed(2)}`}</span><br />
+                        <span className='priceSubitle'>Income per year</span>
+                      </div>
+                    </Stack>
+                  </Card>
           </Stack>
         </Grid>
       </Grid>
@@ -116,9 +122,9 @@ const Dashboard = () => {
         <Grid item xs={4}>
           <Card sx={{ height: 60 +"vh" }}>
             <CardContent>
-              <div className='accordionStyles'>
-                Popular Products
-              </div>
+            <Typography variant="h4" sx={{ marginBottom: 2, width: '80%', flexShrink: 0 }} className="accordionTitle">
+                    Popular Products
+                </Typography>
               <AccordionDash />
             </CardContent>
           </Card>

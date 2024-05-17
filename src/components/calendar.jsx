@@ -1,115 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import EventForm from "../components/EventForm";
+import "../styles/CalendarView.css"; // Import CSS file for styling
 
 function CalendarView() {
   const [showEventForm, setShowEventForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [eventSources, setEventSources] = useState([]);
+  const [events, setEvents] = useState([
+    { title: 'May Day Event', date: '2024-05-01', time: '12:00', eventType: 'High' },
+    { title: 'May Mid Event', date: '2024-05-15', time: '15:00', eventType: 'Medium' },
+    { title: 'May End Event', date: '2024-05-31', time: '18:00', eventType: 'Low' },
+    { title: 'June Event 1', date: '2024-06-05', time: '10:00', eventType: 'High' },
+    { title: 'June Event 2', date: '2024-06-12', time: '14:00', eventType: 'Medium' },
+    { title: 'June Event 3', date: '2024-06-20', time: '16:00', eventType: 'Low' },
+    { title: 'July Event 1', date: '2024-07-10', time: '13:00', eventType: 'High' },
+    { title: 'July Event 2', date: '2024-07-18', time: '11:00', eventType: 'Medium' },
+    { title: 'July Event 3', date: '2024-07-25', time: '17:00', eventType: 'Low' },
+    { title: 'August Event 1', date: '2024-08-05', time: '10:00', eventType: 'High' },
+    { title: 'August Event 2', date: '2024-08-18', time: '15:00', eventType: 'Medium' },
+    { title: 'August Event 3', date: '2024-08-30', time: '18:00', eventType: 'Low' }
+  ]
+  );
+
   const getColorByEventType = (eventType) => {
-    switch (eventType) {
-        case 'high':
-            return 'red';
-        case 'medium':
-            return 'yellow';
-        case 'low':
-            return 'green';
-        default:
-            return 'blue';
+    switch (eventType.toLowerCase()) {
+      case 'high':
+        return 'red';
+      case 'medium':
+        return 'blue';
+      case 'low':
+        return 'green';
+      default:
+        return 'yellow';
     }
-};
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-        try {
-            const response = await fetch('https://csms-backend.vercel.app/api/calendar-events');
-            if (!response.ok) {
-                throw new Error('Failed to fetch events');
-            }
-            const events = await response.json();
-            const formattedEvents = events.map(event => ({
-                title: event.title,
-                start: `${event.event_date}T${event.event_time}`,
-                color: getColorByEventType(event.event_type), // Use event_type instead of eventType
-            }));
-            setEventSources([{ events: formattedEvents }]);
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    };
-
-    fetchEvents();
-}, []);
-
-const addSampleEvents = async () => {
-  try {
-    // Sample event data
-    const sampleEvents = [
-      { title: 'May Day Event', date: '2024-05-01', time: '12:00', eventType: 'High' },
-      { title: 'May Mid Event', date: '2024-05-15', time: '15:00', eventType: 'Medium' },
-      { title: 'May End Event', date: '2024-05-31', time: '18:00', eventType: 'Low' }
-    ];
-
-    // Submit each sample event to the backend
-    await Promise.all(sampleEvents.map(async (event) => {
-      const formattedEvent = {
-        title: event.title,
-        date: event.date,
-        time: event.time,
-        eventType: event.eventType.toLowerCase()
-      };
-      await handleEventSubmit(formattedEvent);
-    }));
-  } catch (error) {
-    console.error('Error adding sample events:', error);
-  }
-};
-
+  };
 
   const handleDateClick = (info) => {
     setShowEventForm(true);
     setSelectedDate(info.dateStr);
   };
 
-  const handleEventSubmit = async (newEvent) => {
-    try {
-      // Transform newEvent to match the backend expectations
-      const formattedEvent = {
-        title: newEvent.title,
-        event_date: newEvent.date, // Ensure this is in the correct format YYYY-MM-DD
-        event_time: newEvent.time, // Ensure this is in the correct format HH:MM:SS
-        event_type: newEvent.eventType.toLowerCase() // Ensure this is 'high', 'medium', or 'low'
-      };
-  
-      console.log('Submitting new event:', formattedEvent); // Debugging log
-  
-      const response = await fetch('https://csms-backend.vercel.app/api/calendar-events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formattedEvent)
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to add event');
-      }
-  
-      setShowEventForm(false);
-      console.log('Event added successfully');
-    } catch (error) {
-      console.error('Error adding event:', error);
-    }
+  const handleEventSubmit = (newEvent) => {
+    setEvents([...events, newEvent]);
+    setShowEventForm(false);
   };
-  
 
-  
+  const formattedEvents = events.map(event => ({
+    title: event.title,
+    start: `${event.date}T${event.time}`,
+    color: getColorByEventType(event.eventType)
+  }));
+
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setShowEventForm(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <>
+    <div className="calendar-container">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={"dayGridMonth"}
@@ -119,19 +81,19 @@ const addSampleEvents = async () => {
           end: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
         height={"90vh"}
-        eventSources={eventSources}
-        dateClick={handleDateClick} 
+        events={formattedEvents}
+        dateClick={handleDateClick}
       />
       {showEventForm && (
-        <div className="event-form-container">
-          <h2>Add New Event</h2>
-          <EventForm date={selectedDate} onSubmit={handleEventSubmit} />
+        <div className="overlay">
+          <div className="event-form-window" ref={formRef}>
+            <h2>Add New Event</h2>
+            <EventForm date={selectedDate} onSubmit={handleEventSubmit} />
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
 export default CalendarView;
-
-
